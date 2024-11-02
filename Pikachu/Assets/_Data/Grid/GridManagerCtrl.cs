@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridManagerCtrl : MonoBehaviour
+public class GridManagerCtrl : SaiMonoBehaviour
 {
     public BlockSpawner blockSpawner;
 
@@ -16,7 +16,7 @@ public class GridManagerCtrl : MonoBehaviour
     {
         if (this.blockSpawner != null) return;
         this.blockSpawner = transform.Find("BlockSpawner").GetComponent<BlockSpawner>();
-        Debug.Log(transform.name + " LoadS", gameObject);
+        Debug.Log(transform.name + " LoadSpawner", gameObject);
     }
 
 }
