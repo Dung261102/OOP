@@ -9,11 +9,25 @@ public class BlockSpawner : Spawner
     public static BlockSpawner Instance => instance;
 
     public static string BLOCK = "Block";
+    public BlocksProfile blocksProfile;
    
     protected override void Awake()
     {
         base.Awake();
         if (BlockSpawner.instance != null) Debug.LogError("Only 1 BlockSpawner allow to exist");
         BlockSpawner.instance = this;
+    }
+
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadBlockProflie();
+    }
+
+    protected virtual void LoadBlockProflie()
+    {
+        if (this.blocksProfile != null) return;
+        this.blocksProfile = Resources.Load<BlocksProfile>("Pikachu"); 
+        Debug.Log(transform.name + " LoadModel", gameObject);
     }
 }
