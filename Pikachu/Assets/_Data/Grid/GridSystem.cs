@@ -20,6 +20,45 @@ public class GridSystem : GridAbstract
     protected override void Start()
     {
         this.SpawnBlocks();
+        this.FindNodesNeighbors();
+        this.FindBlocksNeighbors();
+    }
+
+    protected virtual void FindNodesNeighbors()
+    {
+        int x, y;
+        foreach (Node node in this.nodes)
+        {
+            x = node.x;
+            y = node.y;
+            node.up = this.GetNodeByXY(x, y + 1);
+            node.right = this.GetNodeByXY(x + 1, y);
+            node.down = this.GetNodeByXY(x, y - 1);
+            node.left = this.GetNodeByXY(x - 1, y);
+        }
+    }
+
+    public virtual Node GetNodeByXY(int x, int y)
+    {
+        foreach (Node node in this.nodes)
+        {
+            if (node.x == x && node.y == y) return node;
+        }
+
+        return null;
+    }
+
+
+    protected virtual void FindBlocksNeighbors()
+    {
+        foreach (Node node in this.nodes)
+        {
+            if (node.blockCtrl == null) continue;
+            node.blockCtrl.neighbors.Add(node.up.blockCtrl);
+            node.blockCtrl.neighbors.Add(node.right.blockCtrl);
+            node.blockCtrl.neighbors.Add(node.down.blockCtrl);
+            node.blockCtrl.neighbors.Add(node.left.blockCtrl);
+        }
     }
 
     protected override void LoadComponents() //reset hiện được node lên
@@ -106,8 +145,9 @@ public class GridSystem : GridAbstract
                 blockCtrl.blockData.SetSprite(sprite);
 
                 this.LinkNodeBlock(node, blockCtrl); //kết nối 2 node lại với nhau
-        
-            
+                block.name = "Block_" + node.x.ToString() + "_" + node.y.ToString();
+
+
                 block.gameObject.SetActive(true);
             }
         }
