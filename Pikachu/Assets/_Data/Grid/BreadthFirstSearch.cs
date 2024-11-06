@@ -9,7 +9,6 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
 
     public List<Node> queue = new List<Node>();
     public List<Node> path = new List<Node>();
-    public Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
     public List<NodeCameForm> cameFromNodes = new List<NodeCameForm>();
     public List<Node> visited = new List<Node>();
 
@@ -23,7 +22,6 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
 
 
         this.Enqueue(startNode);
-        //this.cameFrom[startNode] = startNode;
         this.cameFromNodes.Add(new NodeCameForm(startNode, startNode));
         this.visited.Add(startNode);
 
@@ -48,7 +46,6 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
                     this.Enqueue(neighbor);
                     this.visited.Add(neighbor);
 
-                    //this.cameFrom[neighbor] = current;
                     this.cameFromNodes.Add(new NodeCameForm(neighbor, current));
 
                 }
@@ -78,7 +75,7 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
         while (currenCell != startNode)
         {
             path.Add(currenCell);
-            //currenCell = this.cameFrom[currenCell];
+            
             currenCell = this.GetCameFrom(currenCell);
 
         }
@@ -91,7 +88,7 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
     //Hàm GetCameFrom
     protected virtual Node GetCameFrom (Node node)
     {
-        return this.cameFromNodes.Find(item => item.node == node).cameFromNode;
+        return this.cameFromNodes.Find(item => item.toNode == node).fromNode;
     }
 
     protected virtual void ShowPath()
