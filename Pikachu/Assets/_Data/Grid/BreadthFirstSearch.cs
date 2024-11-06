@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml;
+﻿using System.Collections.Generic;
 using UnityEngine;
+
+
 
 public class BreadthFirstSearch : GridAbstract, IPathfinding
 {
@@ -10,7 +9,9 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
 
     public List<Node> queue = new List<Node>();
     public List<Node> path = new List<Node>();
-    public Dictionary<Node, Node> cameForm = new Dictionary<Node, Node>();
+    public Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
+    public List<NodeCameForm> cameFromNodes = new List<NodeCameForm>();
+    public List<Node> visited = new List<Node>();
 
 
     //Hàm FnidPath - tìm đường đi 
@@ -22,7 +23,9 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
 
 
         this.Enqueue(startNode);
-        this.cameForm[startNode] = startNode;
+        //this.cameFrom[startNode] = startNode;
+        this.cameFromNodes.Add(new NodeCameForm(startNode, startNode));
+        this.visited.Add(startNode);
 
         while (this.queue.Count > 0)
         {
@@ -40,29 +43,32 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
                 if (neighbor == null) continue;
 
 
-                if (this.IsValidPosition(neighbor, targetNode) && !cameForm.ContainsKey(neighbor))
+                if (this.IsValidPosition(neighbor, targetNode) && !this.visited.Contains(neighbor))
                 {
                     this.Enqueue(neighbor);
-                    this.cameForm[neighbor] = current;
+                    this.visited.Add(neighbor);
+
+                    //this.cameFrom[neighbor] = current;
+                    this.cameFromNodes.Add(new NodeCameForm(neighbor, current));
+
                 }
-                
+
             }
         }
-        this.ShowCameFrom();
+        this.ShowVisited();
         this.ShowPath();
         
     }
 
     //Hàm ShowCameFrom
-    protected virtual void ShowCameFrom()
+    protected virtual void ShowVisited()
     {
-        //Node key = Pair().Key;
-        Node key = this.cameForm.Keys.First(); //chatgpt
-
-        Vector3 pos = key.nodeObj.transform.position;
-        Transform keyObj = this.ctrl.blockSpawner.Spawn(BlockSpawner.SCAN, pos, Quaternion.identity);
-        keyObj.gameObject.SetActive(true);
-
+        foreach (Node node in this.visited)
+        {
+            Vector3 pos = node.nodeObj.transform.position;
+            Transform keyObj = this.ctrl.blockSpawner.Spawn(BlockSpawner.SCAN, pos, Quaternion.identity);
+            keyObj.gameObject.SetActive(true);
+        }
     }
 
     //ham ConstructPath - tìm đường đi ngắn nghất
@@ -72,11 +78,20 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
         while (currenCell != startNode)
         {
             path.Add(currenCell);
-            currenCell = this.cameForm[currenCell];
+            //currenCell = this.cameFrom[currenCell];
+            currenCell = this.GetCameFrom(currenCell);
+
         }
 
         path.Add(startNode);
         path.Reverse();
+    }
+
+
+    //Hàm GetCameFrom
+    protected virtual Node GetCameFrom (Node node)
+    {
+        return this.cameFromNodes.Find(item => item.node == node).cameFromNode;
     }
 
     protected virtual void ShowPath()
@@ -104,7 +119,6 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
         this.queue.RemoveAt(0);
         return node;
     }
-
 
     private bool IsValidPosition(Node node, Node startNode)
     {
