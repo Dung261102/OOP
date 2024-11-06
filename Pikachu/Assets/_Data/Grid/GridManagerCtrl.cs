@@ -10,6 +10,7 @@ public class GridManagerCtrl : SaiMonoBehaviour
 
 
     public BlockSpawner blockSpawner;
+
     public IPathfinding pathfinding;
     public BlockCtrl firstBlock;
     public BlockCtrl lastBlock;
@@ -27,6 +28,7 @@ public class GridManagerCtrl : SaiMonoBehaviour
         base.LoadComponents();
         this.LoadSpawner();
         this.LoadPathfinding();
+       
     }
 
     protected virtual void LoadSpawner()
@@ -35,6 +37,8 @@ public class GridManagerCtrl : SaiMonoBehaviour
         this.blockSpawner = transform.Find("BlockSpawner").GetComponent<BlockSpawner>();
         Debug.Log(transform.name + " LoadSpawner", gameObject);
     }
+
+    //test
 
     protected virtual void LoadPathfinding()
     {
