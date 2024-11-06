@@ -16,7 +16,21 @@ public class Node
     public Node right;
     public Node down;
     public Node left;
+    public NodeTransform nodeTranform;
     public BlockCtrl blockCtrl;
+
+    public virtual List<Node> Neighbors()
+    {
+        List<Node> nodes = new List<Node>
+        {
+            this.up,
+            this.right,
+            this.down,
+            this.left
+        };
+        return nodes;
+    }
+
 
 }
 
