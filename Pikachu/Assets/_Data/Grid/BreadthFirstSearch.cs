@@ -9,7 +9,7 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
 
     public List<Node> queue = new List<Node>();
     public List<Node> path = new List<Node>();
-    public List<NodeCameForm> cameFromNodes = new List<NodeCameForm>();
+    public List<NodeStep> cameFromNodes = new List<NodeStep>();
     public List<Node> visited = new List<Node>();
 
 
@@ -22,7 +22,7 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
 
 
         this.Enqueue(startNode);
-        this.cameFromNodes.Add(new NodeCameForm(startNode, startNode));
+        this.cameFromNodes.Add(new NodeStep(startNode, startNode));
         this.visited.Add(startNode);
 
         while (this.queue.Count > 0)
@@ -32,23 +32,24 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
 
             if (current == targetNode)
             {
-                ConstructPath(startNode, targetNode);
+                this.path=BuildNodeBath(startNode, targetNode);
                 break;
             }
 
             foreach (Node neighbor in current.Neighbors())
             {
                 if (neighbor == null) continue;
+                if (!this.visited.Contains(neighbor)) continue;
+                if (!this.IsValidPosition(neighbor, targetNode)) continue;
 
-
-                if (this.IsValidPosition(neighbor, targetNode) && !this.visited.Contains(neighbor))
-                {
+             
+                
                     this.Enqueue(neighbor);
                     this.visited.Add(neighbor);
 
-                    this.cameFromNodes.Add(new NodeCameForm(neighbor, current));
+                    this.cameFromNodes.Add(new NodeStep(neighbor, current));
 
-                }
+                
 
             }
         }
@@ -68,27 +69,36 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
         }
     }
 
-    //ham ConstructPath - tìm đường đi ngắn nghất
-    protected virtual void ConstructPath(Node startNode, Node targetNode)
+    //ham BuildNodeBath - tìm đường đi từ điểm đầu tới điểm target
+    protected virtual List<Node> BuildNodeBath(Node startNode, Node targetNode)
     {
-        Node currenCell = targetNode;
-        while (currenCell != startNode)
+
+        List<Node> path = new List<Node>();
+        Node toNode = targetNode;
+        while (toNode != startNode)
         {
-            path.Add(currenCell);
+            path.Add(toNode);
             
-            currenCell = this.GetCameFrom(currenCell);
+            toNode = this.GetFromNode(toNode);
 
         }
 
         path.Add(startNode);
         path.Reverse();
+
+        return path;
     }
 
 
-    //Hàm GetCameFrom
-    protected virtual Node GetCameFrom (Node node)
+    //Hàm GetFromNode
+    protected virtual Node GetFromNode (Node toNode)
     {
-        return this.cameFromNodes.Find(item => item.toNode == node).fromNode;
+        return this.GetNodeStepByToNode( toNode).fromNode;
+    }
+
+    protected virtual NodeStep GetNodeStepByToNode(Node toNode)
+    {
+       return this.cameFromNodes.Find(item => item.toNode == toNode);
     }
 
     protected virtual void ShowPath()

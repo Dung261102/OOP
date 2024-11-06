@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 [Serializable]
-public class NodeCameForm
+public class NodeStep
 {
     public string nodeId;
     public NodeDirections direction = NodeDirections.noDirection;
@@ -15,7 +15,7 @@ public class NodeCameForm
 
     public Node toNode;
 
-    public NodeCameForm(Node fromNode, Node toNode)
+    public NodeStep(Node fromNode, Node toNode)
     {
         this.nodeId = fromNode.x + "x" + fromNode.y;
 
