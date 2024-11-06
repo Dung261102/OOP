@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable] //hiện node lên
+[Serializable] //hiện toNode lên
 public class Node
 {
     public int x = 0;
