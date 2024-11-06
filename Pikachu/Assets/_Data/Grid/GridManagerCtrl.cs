@@ -38,7 +38,7 @@ public class GridManagerCtrl : SaiMonoBehaviour
         Debug.Log(transform.name + " LoadSpawner", gameObject);
     }
 
-    //test
+  
 
     protected virtual void LoadPathfinding()
     {

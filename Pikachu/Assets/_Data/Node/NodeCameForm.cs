@@ -8,15 +8,32 @@ using UnityEngine;
 public class NodeCameForm
 {
     public string nodeId;
+    public NodeDirections direction = NodeDirections.noDirection;
 
-    public Node node;
-    public Node cameFromNode;
 
-    public NodeCameForm(Node node, Node cameFromNode)
+    public Node fromNode;
+
+    public Node toNode;
+
+    public NodeCameForm(Node fromNode, Node toNode)
     {
-        this.nodeId = node.x + "x" + node.y;
+        this.nodeId = fromNode.x + "x" + fromNode.y;
 
-        this.node = node;
-        this.cameFromNode = cameFromNode;
+        this.toNode = fromNode;
+        this.fromNode = toNode;
+        this.direction = this.GetDirection( fromNode, toNode);
+
+    }
+
+    protected virtual NodeDirections GetDirection(Node fromNode, Node toNode)
+    {
+        if (fromNode.x == toNode.x && fromNode.y < toNode.y) return NodeDirections.up;
+        if (fromNode.x == toNode.x && fromNode.y > toNode.y) return NodeDirections.down;
+
+        if (fromNode.x < toNode.x && fromNode.y == toNode.y) return NodeDirections.right;
+        if (fromNode.x > toNode.x && fromNode.y == toNode.y) return NodeDirections.left;
+
+        return NodeDirections.noDirection;
+
     }
 }
