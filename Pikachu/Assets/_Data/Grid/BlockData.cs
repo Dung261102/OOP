@@ -9,12 +9,12 @@ public class BlockData : BlockAbstract
     [Header("BlockData")]
     public TextMeshPro text;
 
+    public Color textColor = Color.red;
+
     // Thuộc tính lưu thông tin của node mà block này đang thuộc về
     public Node node;
 
-    // Thuộc tính lưu trữ hình ảnh (sprite) đại diện cho Block trong game
-    public Sprite sprite;
-    
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -37,6 +37,7 @@ public class BlockData : BlockAbstract
         this.node = node;
         //mã số 
         this.text.text = this.node.x.ToString() + "\n" +  this.node.y.ToString(); 
+        this.SetColor(this.textColor);
     }
 
     //Hàm lấy hình ảnh
@@ -44,5 +45,10 @@ public class BlockData : BlockAbstract
     {
         //this.sprite = sprite;
         this.ctrl.sprite.sprite = sprite;
+    }
+
+    public virtual void SetColor(Color color)
+    {
+        this.text.color = color;
     }
 }
