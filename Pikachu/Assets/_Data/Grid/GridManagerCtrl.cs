@@ -13,6 +13,8 @@ public class GridManagerCtrl : SaiMonoBehaviour
     public IPathfinding pathfinding;
     public BlockCtrl firstBlock;
     public BlockCtrl lastBlock;
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -51,6 +53,7 @@ public class GridManagerCtrl : SaiMonoBehaviour
             Debug.Log("Reset blocks");
             return;
         }
+
         if (this.firstBlock == null)
         {
             this.firstBlock = blockCtrl;
