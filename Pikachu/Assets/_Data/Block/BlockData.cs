@@ -8,14 +8,14 @@ public class BlockData : BlockAbstract
 {
     [Header("BlockData")]
 
-    // Thuộc tính lưu thông tin của node mà block này đang thuộc về
+    // Thuộc tính lưu thông tin của toNode mà block này đang thuộc về
     public Node node;
 
 
  
 
 
-    // Hàm thiết lập node cho block
+    // Hàm thiết lập toNode cho block
     public virtual void SetNode(Node node)
     {
         this.node = node;

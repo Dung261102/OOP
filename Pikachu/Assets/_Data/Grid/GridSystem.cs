@@ -8,7 +8,7 @@ public class GridSystem : GridAbstract
     //Kích thước của lưới
     public int width = 18;
     public int height = 11;
-    public float offsetX = 0.2f; //Khoảng cách giữa các node
+    public float offsetX = 0.2f; //Khoảng cách giữa các toNode
     public BlocksProfileSO blocksProfile;
     public List<Node> nodes;
    
@@ -18,7 +18,7 @@ public class GridSystem : GridAbstract
 
    
     
-    protected override void LoadComponents() //reset hiện được node lên
+    protected override void LoadComponents() //reset hiện được toNode lên
     {
         base.LoadComponents();
         this.InitGridSystem();
@@ -78,13 +78,13 @@ public class GridSystem : GridAbstract
     }
 
 
-    //Hàm hiện node lên
+    //Hàm hiện toNode lên
     protected virtual void InitGridSystem()
     {
         if (this.nodes == null) this.nodes = new List<Node>();
         if (this.nodeIds == null) this.nodeIds = new List<int>();
 
-        if (this.nodes.Count > 0) return; // Đảm bảo không khởi tạo lại nếu danh sách node đã có
+        if (this.nodes.Count > 0) return; // Đảm bảo không khởi tạo lại nếu danh sách toNode đã có
 
         int nodeId = 0;
         for (int x = 0; x < this.width; x++)
@@ -106,7 +106,7 @@ public class GridSystem : GridAbstract
         }
 
         Debug.Log("Total nodes created: " + this.nodes.Count); // Thêm thông báo debug
-        Debug.Log("Total node IDs available: " + this.nodeIds.Count); // Thêm thông báo debug
+        Debug.Log("Total toNode IDs available: " + this.nodeIds.Count); // Thêm thông báo debug
     }
 
 
@@ -165,7 +165,7 @@ public class GridSystem : GridAbstract
                 //Lấy hình ảnh
                 blockCtrl.blockData.SetSprite(sprite);
 
-                this.LinkNodeBlock(blockCtrl, node); //kết nối 2 node lại với nhau
+                this.LinkNodeBlock(blockCtrl, node); //kết nối 2 toNode lại với nhau
                 block.name = "Block_" + node.x.ToString() + "_" + node.y.ToString();
 
 
@@ -178,19 +178,11 @@ public class GridSystem : GridAbstract
 
     protected virtual Node GetRandomNode()
     {
-        //chatgpt
-        // Kiểm tra danh sách nodeIds trước khi cố gắng lấy ngẫu nhiên
-        //if (this.nodeIds.Count == 0)
-        //{
-        //    Debug.LogError("No available nodes to choose from.");
-        //    return null;
-        //}
-        //end
-
+   
         Node node;
         int randId;
         int nodeCount = this.nodes.Count;
-        //Đi tìm đúng số lần mà node có trong danh sách
+        //Đi tìm đúng số lần mà toNode có trong danh sách
         for (int i = 0; i < nodeCount; i++)
         {
             if (this.nodeIds.Count == 0) break;  // Kiểm tra nếu nodeIds trống
