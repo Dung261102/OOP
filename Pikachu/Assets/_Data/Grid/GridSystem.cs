@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using static Unity.Collections.AllocatorManager;
 
 public class GridSystem : GridAbstract
 {
@@ -11,10 +9,10 @@ public class GridSystem : GridAbstract
     public int width = 18;
     public int height = 11;
     public float offsetX = 0.2f; //Khoảng cách giữa các node
-    public BlocksProfile blocksProfile;
+    public BlocksProfileSO blocksProfile;
     public List<Node> nodes;
    
-    public List<BlockCtrl> blocks;
+    //public List<BlockCtrl> blocks;
     public List<int> nodeIds;
 
 
@@ -30,13 +28,13 @@ public class GridSystem : GridAbstract
     protected virtual void LoadBlockProflie()
     {
         if (this.blocksProfile != null) return;
-        this.blocksProfile = Resources.Load<BlocksProfile>("Pikachu");
+        this.blocksProfile = Resources.Load<BlocksProfileSO>("Pokemons");
         Debug.LogWarning(transform.name + " LoadBlockProflie", gameObject);
     }
 
     protected override void Start()
     {
-        this.SpawnHolders();
+        this.SpawnNodeObj();
         this.SpawnBlocks();
         this.FindNodesNeighbors();
         this.FindBlocksNeighbors();
@@ -113,34 +111,27 @@ public class GridSystem : GridAbstract
 
 
     //done
-    protected virtual void SpawnHolders()
+    protected virtual void SpawnNodeObj()
     {
-      
-
         Vector3 pos = Vector3.zero;
         foreach (Node node in this.nodes)
         {
-
-
             pos.x = node.posX;
             pos.y = node.y;
 
-            Transform blockObj = this.ctrl.blockSpawner.Spawn(BlockSpawner.HOLDER, pos, Quaternion.identity);
+            Transform obj = this.ctrl.blockSpawner.Spawn(BlockSpawner.NODE_OBJ, pos, Quaternion.identity);
+            obj.name = "Holder_" + node.x.ToString() + "_" + node.y.ToString();
+            obj.gameObject.SetActive(true);
 
-           
+            NodeObj nodeObj = obj.GetComponent<NodeObj>();
+            nodeObj.SetText(node.y + "\n" + node.x);
+            Color color = node.y % 2 == 0 ? Color.red : Color.blue;
+            nodeObj.SetColor(color);
+            nodeObj.gameObject.SetActive(true);
 
-            // Lấy component NodeTransform từ blockObj
-            NodeTransform blockHolder = blockObj.GetComponent<NodeTransform>();
-
-          
-
-            node.nodeTranform = blockHolder;
-            blockObj.name = "Holder_" + node.x.ToString() + "_" + node.y.ToString();
-            blockHolder.gameObject.SetActive(true);
+            node.nodeObj = nodeObj;
 
 
-            blockObj.gameObject.SetActive(true);
-            node.occupied = true;
         }
     }
 
@@ -158,9 +149,9 @@ public class GridSystem : GridAbstract
                 pos.y = node.y;
 
                 //lấy toạ độ của block
-                Transform blockObj = this.ctrl.blockSpawner.Spawn(BlockSpawner.HOLDER, pos, Quaternion.identity);
-                NodeTransform blockHolder = blockObj.GetComponent<NodeTransform>();
-                node.nodeTranform = blockHolder;
+                Transform blockObj = this.ctrl.blockSpawner.Spawn(BlockSpawner.NODE_OBJ, pos, Quaternion.identity);
+                NodeObj blockHolder = blockObj.GetComponent<NodeObj>();
+                node.nodeObj = blockHolder;
                 blockObj.name = "Holder_" + node.x.ToString() + "_" + node.y.ToString();
 
 
@@ -221,10 +212,6 @@ public class GridSystem : GridAbstract
         Debug.LogError("Node can't found, this should not happen");
         return null;
     }
-
-
-    
-
 
 
     //done

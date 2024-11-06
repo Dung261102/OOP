@@ -1,10 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
-using UnityEditor.Experimental.GraphView;
+using System.Linq;
+using System.Xml;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class BreadthFirstSearch : GridAbstract, IPathfinding
 {
@@ -13,6 +11,7 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
     public List<Node> queue = new List<Node>();
     public List<Node> path = new List<Node>();
     public Dictionary<Node, Node> cameForm = new Dictionary<Node, Node>();
+
 
     //Hàm FnidPath - tìm đường đi 
     public virtual void FindPath(BlockCtrl startBlock, BlockCtrl targetBlock)
@@ -41,7 +40,7 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
                 if (neighbor == null) continue;
 
 
-                if (this.IsValidPosition(neighbor) && !cameForm.ContainsKey(neighbor))
+                if (this.IsValidPosition(neighbor, targetNode) && !cameForm.ContainsKey(neighbor))
                 {
                     this.Enqueue(neighbor);
                     this.cameForm[neighbor] = current;
@@ -49,8 +48,21 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
                 
             }
         }
+        this.ShowCameFrom();
         this.ShowPath();
         
+    }
+
+    //Hàm ShowCameFrom
+    protected virtual void ShowCameFrom()
+    {
+        //Node key = Pair().Key;
+        Node key = this.cameForm.Keys.First(); //chatgpt
+
+        Vector3 pos = key.nodeObj.transform.position;
+        Transform keyObj = this.ctrl.blockSpawner.Spawn(BlockSpawner.SCAN, pos, Quaternion.identity);
+        keyObj.gameObject.SetActive(true);
+
     }
 
     //ham ConstructPath - tìm đường đi ngắn nghất
@@ -72,7 +84,7 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
         Vector3 pos;
         foreach (Node node in this.path)
         {
-            pos = node.nodeTranform.transform.position;
+            pos = node.nodeObj.transform.position;
             UnityEngine.Transform linker = this.ctrl.blockSpawner.Spawn(BlockSpawner.LINKER, pos, Quaternion.identity);
             linker.gameObject.SetActive(true);
         }
@@ -93,11 +105,12 @@ public class BreadthFirstSearch : GridAbstract, IPathfinding
         return node;
     }
 
-   
-    private bool IsValidPosition(Node node)
+
+    private bool IsValidPosition(Node node, Node startNode)
     {
-        return !node.occupied; 
-      
+        if (node == startNode) return true;
+
+        return !node.occupied;
     }
 
 }

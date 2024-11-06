@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,4 +19,7 @@ public abstract class GridAbstract : SaiMonoBehaviour
         this.ctrl = transform.parent.GetComponent<GridManagerCtrl>();
         Debug.LogWarning(transform.name + " LoadCtrl", gameObject);
     }
+
+   
+
 }
