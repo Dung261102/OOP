@@ -8,6 +8,10 @@ using UnityEngine;
 public class NodeStep
 {
     public string nodeId;
+    public string stepsString = "";
+    public string directionString = "";
+    public int changeDirectionCount = 0;
+
     public NodeDirections direction = NodeDirections.noDirection;
 
 
@@ -15,14 +19,14 @@ public class NodeStep
 
     public Node toNode;
 
-    public NodeStep(Node fromNode, Node toNode)
+    public NodeStep(Node toNode, Node fromNode)
     {
-        this.nodeId = fromNode.x + "x" + fromNode.y;
+        this.nodeId = toNode.x + "x" + toNode.y;
 
-        this.toNode = fromNode;
-        this.fromNode = toNode;
-        this.direction = this.GetDirection( fromNode, toNode);
+        this.toNode = toNode;
+        this.fromNode = fromNode;
 
+        this.direction = this.GetDirection(toNode, fromNode);
     }
 
     protected virtual NodeDirections GetDirection(Node fromNode, Node toNode)
