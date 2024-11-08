@@ -7,7 +7,8 @@ public class BlockCtrl : SaiMonoBehaviour
 {
     [Header("Block Ctrl")]
     public SpriteRenderer sprite;
- 
+    public string blockID = "#";
+
     public BlockData blockData;
     public List<BlockCtrl> neighbors = new List<BlockCtrl>(); //TODO: how to get this
 
