@@ -12,7 +12,7 @@ public class BlockData : BlockAbstract
     public Node node;
 
 
- 
+
 
 
     // Hàm thiết lập toNode cho block
@@ -24,7 +24,10 @@ public class BlockData : BlockAbstract
     //Hàm lấy hình ảnh
     public virtual void SetSprite(Sprite sprite)
     {
-        //this.sprite = sprite;
+
         this.ctrl.sprite.sprite = sprite;
+        this.ctrl.blockID = sprite.name;
     }
+
 }
+
