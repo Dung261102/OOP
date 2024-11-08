@@ -11,8 +11,8 @@ public class GridSystem : GridAbstract
     public float offsetX = 0.2f; //Khoảng cách giữa các toNode
     public BlocksProfileSO blocksProfile;
     public List<Node> nodes;
-   
-    //public List<BlockCtrl> blocks;
+
+    public List<BlockCtrl> blocks;
     public List<int> nodeIds;
 
 
@@ -170,12 +170,26 @@ public class GridSystem : GridAbstract
 
 
                 block.gameObject.SetActive(true);
+
+                this.NodeOccupied(node);
+
             }
         }
     }
 
-    //done
+    public virtual void NodeOccupied(Node node)
+    {
+        node.occupied = true;
+        node.blockPlaced = true;
+    }
 
+    public virtual void NodeFree(Node node)
+    {
+        //this.freeNodes.Add(node);
+        node.occupied = false;
+        node.blockCtrl.sprite.sprite = null;
+        //this.ctrl.blockHandler.UnchooseBlock(node.blockCtrl);
+    }
     protected virtual Node GetRandomNode()
     {
    

@@ -25,7 +25,7 @@ public class BlockClickable : BlockAbstract
     }
     protected void OnMouseUp()
     {
-        GridManagerCtrl.Instance.SetNode(this.ctrl);
+        GridManagerCtrl.Instance.blockHandler.SetNode(this.ctrl);
 
         
     }
