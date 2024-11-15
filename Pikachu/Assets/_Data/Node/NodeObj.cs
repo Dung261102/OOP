@@ -5,12 +5,9 @@ using TMPro;
 
 public class NodeObj : SaiMonoBehaviour
 {
-
     public TextMeshPro text;
     public Color textColor = Color.red;
-    public bool isShowText = false;
-
-    //public BlockCtrl blockCtrl;
+    public BlockCtrl blockCtrl;
 
     protected override void LoadComponents()
     {
@@ -34,6 +31,4 @@ public class NodeObj : SaiMonoBehaviour
     {
         this.text.color = color;
     }
-
-
 }

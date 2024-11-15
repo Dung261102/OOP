@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable] //hiện toNode lên
+[Serializable]
 public class Node
 {
     public int x = 0;
@@ -24,10 +24,10 @@ public class Node
     {
         List<Node> nodes = new List<Node>
         {
-            this.up,
-            this.right,
-            this.down,
-            this.left
+            up,
+            right,
+            down,
+            left
         };
         return nodes;
     }
@@ -36,7 +36,4 @@ public class Node
     {
         return this.x + "x" + this.y;
     }
-
-
 }
-

@@ -1,17 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class BlockCtrl : SaiMonoBehaviour
 {
     [Header("Block Ctrl")]
-    public SpriteRenderer sprite;
+    public SpriteRenderer spriteRender;
+    public Sprite sprite;
     public string blockID = "#";
-
     public BlockData blockData;
-    public List<BlockCtrl> neighbors = new List<BlockCtrl>(); //TODO: how to get this
-
+    public List<BlockCtrl> neighbors = new List<BlockCtrl>();
 
     protected override void LoadComponents()
     {
@@ -22,9 +20,9 @@ public class BlockCtrl : SaiMonoBehaviour
 
     protected virtual void LoadModel()
     {
-        if (this.sprite != null) return;
+        if (this.spriteRender != null) return;
         Transform model = transform.Find("Model");
-        this.sprite = model.GetComponent<SpriteRenderer>();
+        this.spriteRender = model.GetComponent<SpriteRenderer>();
         Debug.Log(transform.name + " LoadModel", gameObject);
     }
 
@@ -33,5 +31,11 @@ public class BlockCtrl : SaiMonoBehaviour
         if (this.blockData != null) return;
         this.blockData = transform.Find("BlockData").GetComponent<BlockData>();
         Debug.Log(transform.name + " LoadBlockData", gameObject);
+    }
+
+    public virtual void SetSprite(Sprite sprite)
+    {
+        this.sprite = sprite;
+        this.spriteRender.sprite = sprite;
     }
 }

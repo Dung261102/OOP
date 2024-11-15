@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 [Serializable]
 public class NodeStep
 {
@@ -11,12 +10,8 @@ public class NodeStep
     public string stepsString = "";
     public string directionString = "";
     public int changeDirectionCount = 0;
-
     public NodeDirections direction = NodeDirections.noDirection;
-
-
     public Node fromNode;
-
     public Node toNode;
 
     public NodeStep(Node toNode, Node fromNode)
@@ -38,6 +33,5 @@ public class NodeStep
         if (fromNode.x > toNode.x && fromNode.y == toNode.y) return NodeDirections.left;
 
         return NodeDirections.noDirection;
-
     }
 }

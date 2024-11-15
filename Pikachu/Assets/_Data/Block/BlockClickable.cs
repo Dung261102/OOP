@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
-
 public class BlockClickable : BlockAbstract
 {
     [Header("Block Clickable")]
@@ -23,10 +22,9 @@ public class BlockClickable : BlockAbstract
         this._collider.size = new Vector3(0.79f, 0.99f, 0.5f);
         Debug.Log(transform.name + " LoadColider", gameObject);
     }
+
     protected void OnMouseUp()
     {
         GridManagerCtrl.Instance.blockHandler.SetNode(this.ctrl);
-
-        
     }
 }

@@ -5,20 +5,15 @@ using UnityEngine;
 public class GridSystem : GridAbstract
 {
     [Header("Grid System")]
-    //Kích thước của lưới
     public int width = 18;
     public int height = 11;
-    public float offsetX = 0.2f; //Khoảng cách giữa các toNode
+    private float offsetX = 0.2f;
     public BlocksProfileSO blocksProfile;
     public List<Node> nodes;
-
-    public List<BlockCtrl> blocks;
     public List<int> nodeIds;
+    public List<Node> freeNodes = new List<Node>();
 
-
-   
-    
-    protected override void LoadComponents() //reset hiện được toNode lên
+    protected override void LoadComponents()
     {
         base.LoadComponents();
         this.InitGridSystem();
@@ -54,7 +49,7 @@ public class GridSystem : GridAbstract
         }
     }
 
-    public virtual Node GetNodeByXY(int x, int y)
+    protected virtual Node GetNodeByXY(int x, int y)
     {
         foreach (Node node in this.nodes)
         {
@@ -63,7 +58,6 @@ public class GridSystem : GridAbstract
 
         return null;
     }
-
 
     protected virtual void FindBlocksNeighbors()
     {
@@ -77,14 +71,9 @@ public class GridSystem : GridAbstract
         }
     }
 
-
-    //Hàm hiện toNode lên
     protected virtual void InitGridSystem()
     {
-        if (this.nodes == null) this.nodes = new List<Node>();
-        if (this.nodeIds == null) this.nodeIds = new List<int>();
-
-        if (this.nodes.Count > 0) return; // Đảm bảo không khởi tạo lại nếu danh sách toNode đã có
+        if (this.nodes.Count > 0) return;
 
         int nodeId = 0;
         for (int x = 0; x < this.width; x++)
@@ -98,19 +87,13 @@ public class GridSystem : GridAbstract
                     posX = x - (this.offsetX * x),
                     nodeId = nodeId,
                 };
-
                 this.nodes.Add(node);
-                this.nodeIds.Add(nodeId); // Thêm nodeId vào danh sách nodeIds
+                this.nodeIds.Add(nodeId);
                 nodeId++;
             }
         }
-
-        Debug.Log("Total nodes created: " + this.nodes.Count); // Thêm thông báo debug
-        Debug.Log("Total toNode IDs available: " + this.nodeIds.Count); // Thêm thông báo debug
     }
 
-
-    //done
     protected virtual void SpawnNodeObj()
     {
         Vector3 pos = Vector3.zero;
@@ -130,16 +113,13 @@ public class GridSystem : GridAbstract
             nodeObj.gameObject.SetActive(true);
 
             node.nodeObj = nodeObj;
-
-
         }
     }
 
-    //Hàm SpawnBlocks()
     protected virtual void SpawnBlocks()
     {
         Vector3 pos = Vector3.zero;
-        int blockCount = 4; //mỗi con xuất hiện 4 lần
+        int blockCount = 4;
         foreach (Sprite sprite in this.blocksProfile.sprites)
         {
             for (int i = 0; i < blockCount; i++)
@@ -148,31 +128,16 @@ public class GridSystem : GridAbstract
                 pos.x = node.posX;
                 pos.y = node.y;
 
-                //lấy toạ độ của block
-                Transform blockObj = this.ctrl.blockSpawner.Spawn(BlockSpawner.NODE_OBJ, pos, Quaternion.identity);
-                NodeObj blockHolder = blockObj.GetComponent<NodeObj>();
-                node.nodeObj = blockHolder;
-                blockObj.name = "Holder_" + node.x.ToString() + "_" + node.y.ToString();
-
-
-                blockHolder.gameObject.SetActive(true);
-
-
                 Transform block = this.ctrl.blockSpawner.Spawn(BlockSpawner.BLOCK, pos, Quaternion.identity);
-
                 BlockCtrl blockCtrl = block.GetComponent<BlockCtrl>();
-                
-                //Lấy hình ảnh
                 blockCtrl.blockData.SetSprite(sprite);
 
-                this.LinkNodeBlock(blockCtrl, node); //kết nối 2 toNode lại với nhau
+                this.LinkNodeBlock(node, blockCtrl);
                 block.name = "Block_" + node.x.ToString() + "_" + node.y.ToString();
-
 
                 block.gameObject.SetActive(true);
 
                 this.NodeOccupied(node);
-
             }
         }
     }
@@ -185,26 +150,20 @@ public class GridSystem : GridAbstract
 
     public virtual void NodeFree(Node node)
     {
-        //this.freeNodes.Add(node);
+        this.freeNodes.Add(node);
         node.occupied = false;
-        node.blockCtrl.sprite.sprite = null;
-        //this.ctrl.blockHandler.UnchooseBlock(node.blockCtrl);
+        node.blockCtrl.spriteRender.sprite = null;
     }
+
     protected virtual Node GetRandomNode()
     {
-   
         Node node;
         int randId;
         int nodeCount = this.nodes.Count;
-        //Đi tìm đúng số lần mà toNode có trong danh sách
         for (int i = 0; i < nodeCount; i++)
         {
-            if (this.nodeIds.Count == 0) break;  // Kiểm tra nếu nodeIds trống
-
             randId = Random.Range(0, this.nodeIds.Count);
             node = this.nodes[this.nodeIds[randId]];
-
-
             this.nodeIds.RemoveAt(randId);
 
             if (node.x == 0) continue;
@@ -219,13 +178,9 @@ public class GridSystem : GridAbstract
         return null;
     }
 
-
-    //done
-    protected virtual void LinkNodeBlock( BlockCtrl blockCtrl, Node node)
+    protected virtual void LinkNodeBlock(Node node, BlockCtrl blockCtrl)
     {
-        blockCtrl.blockData.SetNode(node); //gắn vào hàm spamblock cũng dc
+        blockCtrl.blockData.SetNode(node);
         node.blockCtrl = blockCtrl;
     }
-
-   
 }

@@ -8,14 +8,10 @@ public class GridManagerCtrl : SaiMonoBehaviour
     private static GridManagerCtrl instance;
     public static GridManagerCtrl Instance => instance;
 
-
     public BlockSpawner blockSpawner;
     public BlockHandler blockHandler;
     public GridSystem gridSystem;
-
     public IPathfinding pathfinding;
-   
-
 
     protected override void Awake()
     {
@@ -31,8 +27,6 @@ public class GridManagerCtrl : SaiMonoBehaviour
         this.LoadPathfinding();
         this.LoadBlockHandler();
         this.LoadGridSystem();
-
-
     }
 
     protected virtual void LoadSpawner()
@@ -46,21 +40,20 @@ public class GridManagerCtrl : SaiMonoBehaviour
     {
         if (this.blockHandler != null) return;
         this.blockHandler = transform.Find("BlockHandler").GetComponent<BlockHandler>();
-        Debug.LogWarning(transform.name + " LoadBlockHandler", gameObject);
+        Debug.Log(transform.name + " LoadBlockHandler", gameObject);
     }
 
     protected virtual void LoadGridSystem()
     {
         if (this.gridSystem != null) return;
         this.gridSystem = transform.Find("GridSystem").GetComponent<GridSystem>();
-        Debug.LogWarning(transform.name + " LoadGridSystem", gameObject);
+        Debug.Log(transform.name + " LoadGridSystem", gameObject);
     }
+
     protected virtual void LoadPathfinding()
     {
         if (this.pathfinding != null) return;
         this.pathfinding = transform.GetComponentInChildren<IPathfinding>();
-        Debug.LogWarning(transform.name + " LoadPathfinding", gameObject);
+        Debug.Log(transform.name + " LoadPathfinding", gameObject);
     }
-    
-
 }
